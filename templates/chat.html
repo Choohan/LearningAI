@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="/static/css/robot/style.css" type="text/css" rel="stylesheet" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            @media only screen and (max-width: 1080px) {
+                
+                #content{
+                    width: 65%;
+                    margin-top: 3%;
+                }
+                #but {
+                    width: 15%;
+                    font-size: 4vw;
+                    margin-top: 5%;
+                }
+                
+                .top p{
+                    width: 25vh;
+                    float: left;
+                    font-size: 3vh;
+                    margin-left: 3%;
+                    font-family: sans-serif;
+                    font-weight: bold;
+                }
+                .popupbox{
+                    position: absolute;
+                    left: 0;
+                    width: 100%;
+                    top: 0;
+                    height: 60%;
+                    padding: 0;
+                    margin: 0;
+                    border-width: 0;
+                    border: none;
+                }
+                
+                #usercontainer{
+                    position: absolute;
+                    left: 0vw;
+                    width: 100%;
+                    top: 60%;
+                    height: auto;
+                    padding: 0;
+                }
+                
+                .popupbg{
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                
+                .popupbox textarea {
+                    width: 90%;
+                    margin-top: 5%;
+                    padding: 1% 2%;
+                }
+                .popupbox input[type="submit"]{
+                    font-size: 3vw;
+                }
+                }
+        </style>
+    </head>
+    <body>
+        <div class="top">
+            <div class="tcontent">
+                <img src="/static/img/chat/AI.png" alt="AI" />
+                <p><span id="ainame">Little Han</span> serving...</p>
+            </div>
+        </div>
+        <div class="middle">
+            {% for una in currentUnA %}
+            {% for key in una %}
+            <div class="user">
+                <p>{{ key }}</p>
+            </div>
+            <div class="ai">
+                <p>{{ una[key] }}</p>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="bottom">
+            <form id="question" name="question" action="/ai" method="POST">
+                <textarea id="content" name="content" rows="3"></textarea>
+                <input type="submit" value="Send" name="but" id="but" />
+            </form>
+        </div>
+        {% if run == True %}
+        <div class="popupbg">
+            <div class="popupbox">
+                <h1>Learning mode is on!</h1>
+                <hr />
+                <p>Please decide whether did u satisfied with the result.</p>
+                <form id="improve" name="improve" action="/submit" method="POST">
+                    <input type="checkbox" id="need" name="need" onchange="checkchange(this);" />
+                    <label for="need">Wanna change?</label><br/>
+                    <textarea id="improvecontent" name="improvecontent" disabled rows="5"></textarea>
+                    <br/><br/>
+                    <input type="submit" value="Submit" />
+                </form>
+                <script type="text/javascript">
+                    function checkchange(cb){
+                        if(cb.checked == true){
+                            document.getElementById("improvecontent").disabled = false;
+                            document.getElementById("improvecontent").required = true;
+                        }else{
+                            document.getElementById("improvecontent").disabled = true;
+                            document.getElementById("improvecontent").required = false;
+                        }
+                    }
+                </script>
+            </div>
+            <div id="usercontainer">
+                <div class="user1">
+                    <p>{{ userText }}</p>
+                </div>
+                <div class="ai1">
+                    <p>{{ aianswer }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </body>
+</html>
